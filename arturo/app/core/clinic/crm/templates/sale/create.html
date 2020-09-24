@@ -1,0 +1,201 @@
+{% extends 'form.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block head_form %}
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/bootstrap-touchspin-v4.2.5/css/jquery.bootstrap-touchspin.css' %}"/>
+    <script src="{% static 'lib/bootstrap-touchspin-v4.2.5/js/jquery.bootstrap-touchspin.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css' %}"/>
+    <script src="{% static 'sale/js/form.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <form class="form" method="post" action="." enctype="multipart/form-data" id="frmSale"
+          data-url="{% url 'sale_list' %}">
+        <div class="card {{ dshboard.card }}">
+            <div class="card-header">
+                <h3 class="card-title">
+                    {% if action == 'add' %}
+                        <i class="fas fa-plus" aria-hidden="true"></i>
+                    {% else %}
+                        <i class="fas fa-edit" aria-hidden="true"></i>
+                    {% endif %}
+                    {{ title }}
+                </h3>
+            </div>
+            <div class="card-body" style="display: block;">
+                <div class="container-fluid">
+                    {% csrf_token %}
+                    <input type="hidden" id="action" name="action" value="{{ action }}">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card card-secondary" style="height: 100vh;">
+                                <div class="card-header">
+                                    <h3 class="card-title"><i class="fas fa-boxes"></i> Productos</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Búsqueda de productos:</label>
+                                        <div class="input-group margin">
+                                            <input type="text" class="form-control" autocomplete="off" name="search"
+                                                   placeholder="Ingrese el nombre de un producto">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-success btn-flat my-group-button btnSearch"
+                                                        type="button">
+                                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                                </button>
+                                                <button class="btn btn-primary btn-flat my-group-button btnClear"
+                                                        type="button">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-flat btnRemoveAll">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table width="100%" class="table table-bordered table-md" id="tblProducts">
+                                        <thead>
+                                        <tr>
+                                            <th>Eliminar</th>
+                                            <th>Producto</th>
+                                            <th>Categoría</th>
+                                            <th>Stock</th>
+                                            <th>Cantidad</th>
+                                            <th>Precio</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card card-secondary">
+                                <div class="card-header">
+                                    <h3 class="card-title"><i class="fas fa-shopping-cart"></i> Datos de la factura</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label class="control-label">Fecha de registro:</label>
+                                        {{ form.date_joined }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Buscar cliente:</label>
+                                        <div class="input-group">
+                                            {{ form.client }}
+                                            <div class="input-group-append">
+                                                <a class="btn btn-info my-group-button btn-flat btnAddClient">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="form-group">
+                                        <label>SUBTOTAL:</label>
+                                        {{ form.subtotal }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>IVA 12%:</label>
+                                        {{ form.iva }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>TOTAL A PAGAR:</label>
+                                        {{ form.total }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary btn-flat">
+                    <i class="fas fa-save"></i> Guardar registro
+                </button>
+                <a href="{{ list_url }}" class="btn btn-danger btn-flat">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </div>
+    </form>
+
+    <div id="myModalAddClient" class="modal fade" role="dialog">
+        <form class="form" id="frmClient" method="POST">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <b><i class="fa fa-plus" aria-hidden="true"></i> Nuevo registro de un cliente</b>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            {% for field in frmClient.visible_fields %}
+                                <div class="form-group">
+                                    <label>{{ field.label }}:</label>
+                                    {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-flat btn-block">
+                            <i class="fas fa-save"></i> Guardar registro
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <div id="myModalSearchProd" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <b><i class="fa fa-search" aria-hidden="true"></i> Búsqueda de productos</b>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <table width="100%" class="table table-bordered table-md" id="tblSearchProd">
+                            <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Agregar</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="application/javascript">
+        let iva = 0.12;
+        $(function () {
+            vents.list_products();
+        });
+    </script>
+{% endblock %}

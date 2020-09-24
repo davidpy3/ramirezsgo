@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<style>
+    #header {
+        padding-top: 10px;
+        width: 50%;
+        margin: 0;
+        background-color: #000;
+        font-size: 13px;
+        color: #fff;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .img-invoice {
+        width: 50px;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .head {
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    #invoice thead tr th {
+        text-align: left;
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        padding-top: 4px;
+    }
+
+    #invoice thead tr {
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    #invoice tbody tr {
+        padding: 0;
+    }
+</style>
+<body>
+<img src="{{ comp.get_image }}" class="img-invoice">
+<p class="head">
+    {{ comp.name|upper }}<br>
+    {{ comp.proprietor }}<br>
+    {{ comp.address|upper }}
+</p>
+<p>
+    <b>FECHA DE REGISTRO:</b> {{ datemedical.date_joined }}<br>
+    <b>FECHA DE ÚLTIMA REGLA:</b> {{ datemedical.lastperiod_date|upper }}<br>
+    <b>SEMANA:</b> {{ datemedical.get_weekday|upper }}<br>
+    <b>HORA DE REGISTRO:</b> {{ datemedical.hour|upper }}<br>
+    <b>PACIENTE:</b> {{ datemedical.client.get_full_name|upper }}<br>
+</p>
+<hr>
+<p>
+    <b>Sintomas:</b><br>
+    {{ datemedical.symptoms }}
+</p>
+<hr>
+<p>
+    <b>Diagnóstico:</b><br>
+    {{ datemedical.diagnosis }}
+</p>
+<hr>
+<p>
+    <b>Tratamiento:</b><br>
+    {{ datemedical.treatment }}
+</p>
+<p id="header">PARAMÉTROS</p>
+<table id="invoice">
+    <thead>
+    <tr>
+        <th style="width: 80%;">PARAMETRO</th>
+        <th style="width: 20%;">VALOR</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for d in datemedical.datemedicalparameters_set.all %}
+        <tr {% if forloop.first %}style="padding-top: 3px;" {% endif %}>
+            <td>{{ d.medicalparameters.name }}</td>
+            <td>{{ d.valor }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<p id="header">EXÁMENES</p>
+<table id="invoice">
+    <thead>
+    <tr>
+        <th style="width: 20%;">VALOR</th>
+        <th style="width: 80%;">EXAMEN</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for d in datemedical.datemedicalexam_set.all %}
+        <tr {% if forloop.first %}style="padding-top: 3px;" {% endif %}>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ d.exam.name }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<p id="header">MEDICAMENTOS</p>
+<table id="invoice">
+    <thead>
+    <tr>
+        <th style="width: 60%;">PRODUCTO</th>
+        <th style="width: 10%;">CANT</th>
+        <th style="width: 15%;">P.UNITARIO</th>
+        <th style="width: 15%;">SUBTOTAL</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for d in datemedical.datemedicalproducts_set.all %}
+        <tr {% if forloop.first %}style="padding-top: 3px;" {% endif %}>
+            <td>{{ d.product.name }}</td>
+            <td style="text-align: center;">{{ d.cant }}</td>
+            <td style="text-align: center;">{{ d.price }}</td>
+            <td style="text-align: center;">{{ d.subtotal }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

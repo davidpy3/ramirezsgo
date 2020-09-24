@@ -1,0 +1,45 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'lib/bootstrap-daterangepicker-3.0.5/spanish.js' %}"></script>
+    <script src="{% static 'lib/bootstrap-daterangepicker-3.0.5/daterangepicker.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/bootstrap-daterangepicker-3.0.5/daterangepicker.css' %}"/>
+    <script src="{% static 'historialmedical/client/js/list.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="card {{ dshboard.card }}">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-search"></i>
+                {{ title }}
+            </h3>
+            <div class="card-tools">
+                <small>Su último acceso al sistema fue el {{ request.user.last_login }}</small>
+            </div>
+        </div>
+        <div class="card-body" style="display: block;">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Buscar por fecha de registro:</label>
+                        <div class="input-group">
+                            {{ form.date_range }}
+                            <span class="input-group-append">
+                        <button type="button" class="btn btn-success btn-flat btnSearchAll">
+                            <i class="fas fa-search"></i> Ver todas
+                        </button>
+                      </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline">
+
+            </div>
+        </div>
+        <div class="card-footer">
+
+        </div>
+    </div>
+{% endblock %}

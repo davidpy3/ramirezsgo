@@ -1,0 +1,42 @@
+{% extends 'form.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block head_form %}
+    <script src="{% static 'mainpage/js/form.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <form class="form" method="post" action="." enctype="multipart/form-data" id="frmForm"
+          data-url="{% url 'dashboard' %}">
+        <div class="card {{ dshboard.card }}">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-edit"></i>
+                    {{ title }}
+                </h3>
+                <div class="card-tools">
+                    <small>Su último acceso al sistema fue el {{ request.user.last_login }}</small>
+                </div>
+            </div>
+            <div class="card-body" style="display: block;">
+                <div class="container-fluid">
+                    <input type="hidden" value="{{ action }}" name="action">
+                    {% for field in form.visible_fields %}
+                        <div class="form-group">
+                            <label>{{ field.label }}:</label>
+                            {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary btn-flat">
+                    <i class="fas fa-save" aria-hidden="true"></i> Guardar registro
+                </button>
+                <a href="{% url 'dashboard' %}" class="btn btn-danger btn-flat">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

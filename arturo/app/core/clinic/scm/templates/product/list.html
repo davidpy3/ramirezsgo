@@ -1,0 +1,46 @@
+{% extends 'list.html' %}
+
+{% block columns %}
+    <th class="text-center">Nro</th>
+    <th>Nombre</th>
+    <th>Categoria</th>
+    <th>Imagen</th>
+    <th>Precio</th>
+    <th>Stock</th>
+    <th class="text-center">Opciones</th>
+{% endblock %}
+
+{% block rows %}
+    {% for i in object_list %}
+        <tr>
+            <td>{{ i.id }}</td>
+            <td>{{ i.name }}</td>
+            <td>{{ i.get_type_display }}</td>
+            <td class="text-center">
+                <img src="{{ i.get_image }}" class="img-fluid d-block mx-auto" style="width: 20px; height: 20px;">
+            </td>
+            <td class="text-center">${{ i.price }}</td>
+            <td class="text-center">
+                {% if i.type == 'servicios' %}
+                    Es un servicio
+                {% else %}
+                    {% if i.stock > 0 %}
+                        <span class="badge badge-success">{{ i.stock }}</span>
+                    {% else %}
+                        <span class="badge badge-danger">{{ i.stock }}</span>
+                    {% endif %}
+                {% endif %}
+            </td>
+            <td class="text-center">
+                <a href="{% url 'product_update' i.id %}" data-toggle="tooltip" title="Editar registro"
+                   class="btn btn-warning btn-xs btn-flat">
+                    <i class="fas fa-edit" aria-hidden="true"></i>
+                </a>
+                <a href="{% url 'product_delete' i.id %}" rel="delete" data-toggle="tooltip" title="Eliminar registro"
+                   class="btn btn-danger btn-xs btn-flat">
+                    <i class="fas fa-trash" aria-hidden="true"></i>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}

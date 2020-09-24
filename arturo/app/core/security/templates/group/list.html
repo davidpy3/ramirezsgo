@@ -1,0 +1,103 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'group/js/list.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+    <th class="text-center">Nro</th>
+    <th>Descripción</th>
+    <th>Cantidad</th>
+    <th class="text-center">Opciones</th>
+{% endblock %}
+
+{% block rows %}
+    {% for i in object_list %}
+        <tr>
+            <td>{{ i.id }}</td>
+            <td>{{ i.name }}</td>
+            <td class="text-center">{{ i.permissions.count }}</td>
+            <td class="text-center">
+                <a href="{% url 'group_update' i.id %}" data-toggle="tooltip" title="Editar registro"
+                   class="btn btn-warning btn-xs btn-flat">
+                    <i class="fas fa-edit" aria-hidden="true"></i>
+                </a>
+                <a href="{% url 'group_delete' i.id %}" rel="delete" data-toggle="tooltip"
+                   title="Eliminar registro" class="btn btn-danger btn-xs btn-flat">
+                    <i class="fas fa-trash" aria-hidden="true"></i>
+                </a>
+                <a data-id="{{ i.id }}" rel="search" data-toggle="tooltip"
+                   title="Ver permisos" class="btn btn-success btn-xs btn-flat">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+
+{% block content_list_before %}
+    <div class="modal fade" id="myModalGroup" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><b><i class="fas fa-search" aria-hidden="true"></i> Consulta de grupo</b>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                                   aria-controls="home" aria-selected="true">Módulos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                                   aria-controls="profile" aria-selected="false">Permisos</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <br>
+                                <table width="100%"
+                                       class="table table-bordered table-md"
+                                       id="tblModules">
+                                    <thead>
+                                    <tr>
+                                        <th>Módulo</th>
+                                        <th>Icono</th>
+                                        <th>Imagen</th>
+                                        <th>Tipo</th>
+                                        <th>¿Es vertical?</th>
+                                        <th>¿Es visible?</th>
+                                        <th>¿Esta activo?</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <br>
+                                <table width="100%"
+                                       class="table table-bordered table-md"
+                                       id="tblPermissions">
+                                    <thead>
+                                    <tr>
+                                        <th>Nro</th>
+                                        <th>Permiso</th>
+                                        <th>Código</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

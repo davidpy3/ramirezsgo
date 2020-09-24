@@ -1,0 +1,131 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'lib/bootstrap-daterangepicker-3.0.5/spanish.js' %}"></script>
+    <script src="{% static 'lib/bootstrap-daterangepicker-3.0.5/daterangepicker.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/bootstrap-daterangepicker-3.0.5/daterangepicker.css' %}"/>
+    <script src="{% static 'datemedical/admin/js/list.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+    <tr>
+        <th>Nro</th>
+        <th>Cliente</th>
+        <th>Fecha de registro</th>
+        <th>Hora de registro</th>
+        <th>Fecha de última regla</th>
+        <th>Semana</th>
+        <th>Estado</th>
+        <th>Opciones</th>
+    </tr>
+{% endblock %}
+
+{% block javascript_list %}
+    <!-- Modal -->
+    <div class="modal fade" id="myModalDetDateMedical" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <b><i class="fas fa-folder-open"></i> Detalle de la cita médica</b>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#home">Datos de la cita</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#menu1">Parámetros Médicos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#menu2">Medicamentos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#menu3">Exámenes</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane container-fluid active" id="home">
+                            <br>
+                            <table width="100%" class="table table-bordered" id="tblDateMedical">
+                                <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane container-fluid fade" id="menu1">
+                            <br>
+                            <table width="100%" class="table table-bordered" id="tblMedicalParameters">
+                                <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Valor</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane container-fluid fade" id="menu2">
+                            <br>
+                            <table width="100%" class="table table-bordered" id="tblMedicines">
+                                <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane container-fluid fade" id="menu3">
+                            <br>
+                            <table width="100%" class="table table-bordered" id="tblExams">
+                                <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content_list_before %}
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="form-group">
+                <label>Buscar por fecha de registro:</label>
+                <div class="input-group">
+                    {{ form.date_range }}
+                    <span class="input-group-append">
+                        <button type="button" class="btn btn-success btn-flat btnSearchAll">
+                            <i class="fas fa-search"></i> Ver todas
+                        </button>
+                      </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+{% endblock %}
